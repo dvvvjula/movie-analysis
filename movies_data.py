@@ -15,24 +15,50 @@ class Movies:
         response = requests.get(f"https://api.themoviedb.org/3/discover/movie?api_key={Movies.api_key}&primary_release_year={year}")
         data = response.json()
         return data
+    
+    @staticmethod
+
+    def get_movie_reviews(movie_id):
+        url = f"https://api.themoviedb.org/3/movie/{movie_id}/reviews?api_key={Movies.api_key}&language=en-US"
+        response = requests.get(url)
+    
+        if response.status_code == 200:
+            reviews = response.json().get('results', [])
+            # 2 reviews
+            return [review['content'] for review in reviews[:3]]
+    
+    def movies_with_reviews(year):
+        response = requests.get(f"https://api.themoviedb.org/3/discover/movie?api_key={Movies.api_key}&year={year}&sort_by=popularity.desc")
+        
+        data = response.json()
+        movies = data['results']
+        movie_list = []
+
+        for movie in movies[:3]: # top 3
+            movie_id = movie['id']
+            reviews = Movies.get_movie_reviews(movie_id)
+
+            movie_dict = {
+                'Title': movie['title'],
+                'Description': movie.get('overview', 'No description available'),
+                'Review 1': reviews[0] if len(reviews) > 0 else 'No review available',
+                'Review 2': reviews[1] if len(reviews) > 1 else 'No review available'
+            }
+            movie_list.append(movie_dict)
+        
+        return movie_list
 
     @staticmethod
-    def avg_rating(data):
+    def avg_rating(data)->str:
         movies = data['results']
     
         total_rating = 0
         total_movies = 0
         
-        # Iteracja po filmach
         for movie in movies:
-            # Sprawdzamy, czy film ma ocenę
             if 'vote_average' in movie:
                 total_rating += int(movie['vote_average'])
                 total_movies += 1
         
-        # Sprawdzanie, czy mamy jakiekolwiek filmy
-        if total_movies > 0:
-            average = total_rating / total_movies
-            print(f"Średnia ocena: {average:.2f}")
-        else:
-            print("Brak filmów z ocenami.")
+        average = total_rating / total_movies
+        return f"Average rating: {average:.2f}"
