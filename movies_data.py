@@ -8,7 +8,7 @@ class Movies:
     api_key = os.getenv("API_KEY")
 
     @staticmethod
-    def popular_movies(year:int):
+    def get_movies(year:int):
         if year < 1960:
             pass
             #raise MoviesInfoError
@@ -16,9 +16,30 @@ class Movies:
         data = response.json()
         return data
     
-    @staticmethod
 
-    def get_movie_reviews(movie_id):
+    @staticmethod
+    def get_movie_country(movie_id: int):
+        response = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={Movies.api_key}")
+        movie_data = response.json()
+        return movie_data
+    
+    @staticmethod
+    def get_movies_by_country(data):
+        movies = data['results']
+        countries = []
+
+        for movie in movies:
+            movie_id = movie['id']
+            movie_details = Movies.get_movie_country(movie_id)
+            
+            production_countries = movie_details.get('production_countries', [])
+            if production_countries:
+                for country in production_countries:
+                    countries.append(country['name'])
+        return countries
+
+    @staticmethod
+    def get_movie_reviews(movie_id: int):
         url = f"https://api.themoviedb.org/3/movie/{movie_id}/reviews?api_key={Movies.api_key}&language=en-US"
         response = requests.get(url)
     
@@ -26,7 +47,8 @@ class Movies:
             reviews = response.json().get('results', [])
             # 2 reviews
             return [review['content'] for review in reviews[:3]]
-    
+
+    @staticmethod
     def movies_with_reviews(year):
         response = requests.get(f"https://api.themoviedb.org/3/discover/movie?api_key={Movies.api_key}&year={year}&sort_by=popularity.desc")
         
