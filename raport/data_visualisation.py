@@ -1,7 +1,6 @@
-from movies_data import Movies
+from api_data.movies_data import Movies
 import pandas as pd
 import matplotlib.pyplot as plt
-from io import BytesIO
 
 class Visualization:
 
@@ -24,6 +23,11 @@ class Visualization:
     def movies_country(data):    
         country_counts = pd.Series(data).value_counts()
         return country_counts
+    
+    @staticmethod
+    def top3_reviews_table(data):
+        df = pd.DataFrame(data)
+        return df
 
     @staticmethod
     def plot_country_distribution(df):
@@ -35,9 +39,10 @@ class Visualization:
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
 
+        # for pdf raport later on:
         plot_file = "country_distribution.png"
         plt.savefig(plot_file)
-        plt.close()  # Zamknij wykres po zapisaniu
+        plt.close()
 
         return plot_file
 
@@ -48,8 +53,9 @@ class Visualization:
         plt.xlabel('Rating')
         plt.title('Popular Movies Ratings')
 
+        # for pdf raport later on:
         plot_file = "movie_ratings.png"
         plt.savefig(plot_file)
-        plt.close()  # Zamknij wykres po zapisaniu
+        plt.close()
 
         return plot_file

@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 import requests
-from exceptions import MoviesInfoError
+from exceptions.exceptions import MoviesInfoError
 
 class Movies:
     load_dotenv()
