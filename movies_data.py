@@ -62,7 +62,6 @@ class Movies:
 
             movie_dict = {
                 'Title': movie['title'],
-                'Description': movie.get('overview', 'No description available'),
                 'Review 1': reviews[0] if len(reviews) > 0 else 'No review available',
                 'Review 2': reviews[1] if len(reviews) > 1 else 'No review available'
             }
