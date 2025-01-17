@@ -1,5 +1,5 @@
 from api_data.movies_data import Movies
-from raport.data_visualisation import Visualization
+from raport.data_visualization import Visualization
 from fpdf import FPDF 
 import pandas as pd
 
@@ -65,8 +65,11 @@ class Raport:
         pdf.set_font("Arial", size=16, style='B')
         pdf.cell(200, 10, txt=f"{year} Movie Data Analysis", ln=True, align="C")
 
+        # introduction (avg, best, worst rating)
         pdf.set_font("Arial", size=14)
         pdf.cell(200, 10, txt=Movies.avg_rating(data), ln=True, align="L")
+        pdf.cell(200, 10, txt=Movies.best_movie(data), ln=True, align="L")
+        pdf.cell(200, 10, txt=Movies.worst_movie(data), ln=True, align="L")
 
         # 1st diagram's img:
         c = Movies.get_movies_by_country(data)

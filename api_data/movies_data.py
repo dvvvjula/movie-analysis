@@ -83,3 +83,19 @@ class Movies:
         
         average = total_rating / total_movies
         return f"Average rating: {average:.2f}"
+    
+    @staticmethod
+    def best_movie(data)->str:
+        best_movie = max(data['results'], key=lambda movie: movie.get('vote_average', 0))
+        title = best_movie['title']
+        rating = best_movie.get('vote_average', 0)
+
+        return f"Best movie was '{title}' with an average rating of {rating}"
+
+    @staticmethod
+    def worst_movie(data)->str:
+        worst_movie = min(data['results'], key=lambda movie: movie.get('vote_average', 0))
+        title = worst_movie['title']
+        rating = worst_movie.get('vote_average', 0)
+
+        return f"Worst movie was '{title}' with an average rating of {rating}"
