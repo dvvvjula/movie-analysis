@@ -6,11 +6,11 @@ import pandas as pd
 class Raport:
     @staticmethod
     def add_table_to_pdf(pdf, dataframe, title, x=10, y=30):
-        pdf.set_font('ArialUnicode', '', 16)
+        pdf.set_font('ArialUnicodeB', size=16)
         pdf.cell(200, 10, txt=title, ln=True, align="C")
         pdf.ln(10)
 
-        pdf.set_font('ArialUnicode', '', 10)
+        pdf.set_font('ArialUnicode', size=10)
         
         # otherwise there's a Series object error...
         if isinstance(dataframe, pd.Series):
@@ -37,17 +37,17 @@ class Raport:
 
     @staticmethod
     def add_reviews_to_pdf(pdf, data, title="Movies Reviews", x=10, y=30):
-        pdf.set_font('ArialUnicode', '', 16)
+        pdf.set_font('ArialUnicodeB', size=16)
         pdf.cell(200, 10, txt=title, ln=True, align="C")
         pdf.ln(10)
 
-        pdf.set_font("Arial", size=12)
+        pdf.set_font("ArialUnicode", size=12)
 
         for movie in data:
-            pdf.set_font('ArialUnicode', '', 12)
+            pdf.set_font('ArialUnicodeB', size=12)
             pdf.cell(200, 10, txt=f"Title: {movie['Title']}", ln=True)
             
-            pdf.set_font('ArialUnicode', '', 10)
+            pdf.set_font('ArialUnicode', size=10)
             
             review1 = movie['Review 1'] if movie['Review 1'] != "No review available" else " "
             pdf.multi_cell(0, 10, txt=f"Review 1: {review1}")
@@ -62,13 +62,15 @@ class Raport:
         # we will need data variable here for further methods:
         data = Movies.get_movies(year)
 
+        # added fonts: normal + bold
         pdf.add_font('ArialUnicode', '', 'src/font/arial_unicode_ms.otf', uni=True)
+        pdf.add_font('ArialUnicodeB', '', 'src/font/arial_unicode_ms_bold.otf', uni=True)
 
-        pdf.set_font('ArialUnicode', '', 16)
+        pdf.set_font('ArialUnicodeB', size=16)
         pdf.cell(200, 10, txt=f"{year} Movie Data Analysis", ln=True, align="C")
 
         # introduction (avg, best, worst rating)
-        pdf.set_font('ArialUnicode', '', 14)
+        pdf.set_font('ArialUnicode', size=14)
         pdf.cell(200, 10, txt=Movies.avg_rating(data), ln=True, align="L")
         pdf.cell(200, 10, txt=Movies.best_movie(data), ln=True, align="L")
         pdf.cell(200, 10, txt=Movies.worst_movie(data), ln=True, align="L")
@@ -84,7 +86,7 @@ class Raport:
 
         # popular movies ratings diagram 
         pdf.ln(10)
-        pdf.set_font('ArialUnicode', '', 14)
+        pdf.set_font('ArialUnicodeB', size=14)
         pdf.cell(200, 10, txt=f"Popular Movies Rating", ln=True, align="C")
         pdf.image(img_buffer2, x=10, y=pdf.get_y(), w=180)
 
@@ -94,7 +96,7 @@ class Raport:
 
         # movies of the year, country of origin diagram
         pdf.ln(30)
-        pdf.set_font('ArialUnicode', '', 14)
+        pdf.set_font('ArialUnicodeB', size=14)
         pdf.cell(200, 10, txt=f"Number of Movies per Country", ln=True, align="C")
         pdf.image(img_buffer1, x=10, y=pdf.get_y(), w=180)
 
